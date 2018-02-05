@@ -5,12 +5,14 @@
 #ifndef ETTELOCLIENT_CLIENT_H
 #define ETTELOCLIENT_CLIENT_H
 
-#include <QtNetwork/QTcpSocket>
 #include <QTWidgets/QPushButton>
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QLineEdit>
 #include <QtWidgets/QListWidget>
+#include <QTableWidget>
+#include <QHeaderView>
+#include "Constants.h"
 //#include <sys/socket.h>
 
 
@@ -20,12 +22,15 @@ public:
     Client();
 
 private:
-    QTcpSocket *tcpSocket;
-    QWidget *widget;
+
+    QWidget *widgetFirst;
     QGridLayout *layout;
     QPushButton *buttonPlay;
     QPushButton *buttonExite;
 
+    QTableWidget *tableWidget;
+
+    QPushButton *gameCell[BOARD_SIZE][BOARD_SIZE];
     void gameStarting();
 
 };

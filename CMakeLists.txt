@@ -12,7 +12,7 @@ find_package(Qt5Network)
 find_package(Qt5Widgets)
 
 
-set(SOURCE_FILES main.cpp Client.cpp Client.h)
+set(SOURCE_FILES main.cpp Client.cpp Client.h Constants.h)
 add_executable(Othello ${SOURCE_FILES})
 
 
