@@ -17,14 +17,17 @@ typedef std::pair<int, int> Cell;
 
 class GameController {
 public:
-    bool isValidMove(Cell move);
+//    bool isValidMove(Cell move);
     std::vector<Cell> act(Cell cell);
     int getCellData(Cell cell);
 
 private:
+    bool checkHasValidMoves(int , int);
+    bool checkHasValidMovesInDirection(int , int , int , int);
+    bool checkValidNextMoveOncheck(int , int , int , int);
     void calculateValidMoves();
     int gameBoard [BOARD_SIZE][BOARD_SIZE];
-    std::vector<Cell> validMoves;
+//    std::vector<Cell> validMoves;
     Side currentTurn;
 };
 
