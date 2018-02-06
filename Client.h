@@ -13,6 +13,8 @@
 #include <QTableWidget>
 #include <QHeaderView>
 #include "Constants.h"
+#include "GameController.h"
+#include <QDebug>
 //#include <sys/socket.h>
 
 
@@ -22,7 +24,7 @@ public:
     Client();
 
 private:
-
+    GameController *gameController = new GameController();
     QWidget *widgetFirst;
     QGridLayout *layout;
     QPushButton *buttonPlay;
@@ -32,6 +34,8 @@ private:
 
     QPushButton *gameCell[BOARD_SIZE][BOARD_SIZE];
     void gameStarting();
+    void clicked(int, int);
+    void updateBoard(std::vector<std::pair<int, int>>);
 
 };
 
