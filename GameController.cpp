@@ -37,9 +37,17 @@ std::vector<Cell> GameController::act(Cell cell) {
 //    if (false) //(!isValidMove(cell))
 //        return std::vector<Cell>();
 
-    gameBoard[cell.first][cell.second] = currentTurn;
-    std::vector<Cell> result = { Cell(cell.first, cell.second) };
-    currentTurn = (currentTurn == White ? Black : White);
+
+    std::vector<Cell> result;
+    if(checkHasValidMoves(cell.first , cell.second)) {
+        qDebug() << "yeeesss";
+        gameBoard[cell.first][cell.second] = currentTurn;
+        result = { Cell(cell.first, cell.second) };
+        currentTurn = (currentTurn == White ? Black : White);
+    }else {
+        qDebug() << "nooo";
+    }
+
     return result;
 }
 
@@ -65,7 +73,7 @@ bool GameController::checkHasValidMoves(int x , int y) {
 
 bool GameController::checkHasValidMovesInDirection(int x , int y , int stepX , int stepY) {
     if(checkValidNextMoveOncheck(x , y , stepX , stepY)){
-        x += x *stepX; y += y*stepY;
+        x += stepX; y += stepY;
     }else{
         return false;
     }
@@ -81,7 +89,7 @@ bool GameController::checkHasValidMovesInDirection(int x , int y , int stepX , i
             return true;
 
         if(checkValidNextMoveOncheck(x , y , stepX , stepY)){
-            x += x *stepX; y += y*stepY;
+            x += stepX; y +=stepY;
         }else{
             return false;
         }
@@ -91,8 +99,8 @@ bool GameController::checkHasValidMovesInDirection(int x , int y , int stepX , i
 }
 
 bool GameController::checkValidNextMoveOncheck(int x , int y, int stepX , int stepY) {
-    if( ((x+1)*stepX) != -1 || ((x+1)*stepX) != 8)
-        if(((y+1)*stepY) != -1 || ((y+1)*stepY) != 8)
+    if ((x+stepX != -1) && (x+stepX != 8) )
+        if((y+stepY != -1) && (y+stepY != 8) )
             return true;
 
     return false;

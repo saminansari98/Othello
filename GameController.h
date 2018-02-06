@@ -7,6 +7,7 @@
 
 #include "Constants.h"
 #include <vector>
+#include <QDebug>
 
 enum Side {
     Black = -1,
@@ -29,7 +30,7 @@ private:
     void calculateValidMoves();
     int gameBoard [BOARD_SIZE][BOARD_SIZE];
 //    std::vector<Cell> validMoves;
-    Side currentTurn;
+    Side currentTurn = White;
 };
 
 
