@@ -5,7 +5,7 @@
 #ifndef OTHELLO_GAMECONTROLLER_H
 #define OTHELLO_GAMECONTROLLER_H
 
-#include "constants.h"
+#include "Constants.h"
 #include <vector>
 
 enum Side {
@@ -17,6 +17,7 @@ typedef std::pair<int, int> Cell;
 
 class GameController {
 public:
+    GameController();
 //    bool isValidMove(Cell move);
     std::vector<Cell> act(Cell cell);
     int getCellData(Cell cell);

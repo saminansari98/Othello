@@ -39,7 +39,20 @@ void Client::gameStarting() {
             gameCell[i][j]->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
             layout->addWidget(gameCell[i][j], i, j);
-//            gameCell[i][j]-> setStyleSheet("background-color:blue");
+
+            if(i == 3 && j == 3) {
+                gameCell[i][j]->setIcon(QPixmap(BLACK_PIECE));
+            }
+            if(i == 4 && j== 3) {
+                gameCell[i][j]->setIcon(QPixmap(WHITE_PIECE));
+            }
+            if(i == 3 && j == 4){
+                gameCell[i][j]->setIcon(QPixmap(WHITE_PIECE));
+            }
+            if(i == 4 && j== 4) {
+                gameCell[i][j]->setIcon(QPixmap(BLACK_PIECE));
+            }
+
         }
     }
 

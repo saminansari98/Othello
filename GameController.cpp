@@ -4,6 +4,27 @@
 
 #include "GameController.h"
 
+GameController::GameController() {
+    for(int i = 0 ; i < 7 ; i++){
+        for(int j = 0 ; j < 7 ; j++){
+            gameBoard[i][j] = 0;
+
+            if(i == 3 && j == 3) {
+                gameBoard[i][j]=Black;
+            }
+            if(i == 4 && j== 3) {
+                gameBoard[i][j]=White;
+            }
+            if(i == 3 && j == 4){
+                gameBoard[i][j]=White;
+            }
+            if(i == 4 && j== 4) {
+                gameBoard[i][j]=Black;
+            }
+        }
+    }
+}
+
 void GameController::calculateValidMoves() {
 
 }
@@ -76,5 +97,7 @@ bool GameController::checkValidNextMoveOncheck(int x , int y, int stepX , int st
 
     return false;
 }
+
+
 
 
