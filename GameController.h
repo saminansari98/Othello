@@ -7,6 +7,7 @@
 
 #include "Constants.h"
 #include <vector>
+#include <map>
 #include <QDebug>
 
 enum Side {
@@ -19,17 +20,19 @@ typedef std::pair<int, int> Cell;
 class GameController {
 public:
     GameController();
-//    bool isValidMove(Cell move);
+    bool isValidMove(Cell move);
+    void calculateValidMoves();
+    std::map<Cell, std::vector<Cell>> flips;
     std::vector<Cell> act(Cell cell);
     int getCellData(Cell cell);
 
 private:
-    bool checkHasValidMoves(int , int);
-    bool checkHasValidMovesInDirection(int , int , int , int);
+    void calculateValidMovesForCell(int, int);
+    void calculateValidMovesForCellInDirection(int, int, int, int);
     bool checkValidNextMoveOncheck(int , int , int , int);
-    void calculateValidMoves();
+
     int gameBoard [BOARD_SIZE][BOARD_SIZE];
-//    std::vector<Cell> validMoves;
+    std::vector<Cell> validMoves;
     Side currentTurn = White;
 };
 

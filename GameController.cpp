@@ -26,26 +26,45 @@ GameController::GameController() {
 }
 
 void GameController::calculateValidMoves() {
+    for (int i = 0; i < BOARD_SIZE; i++) {
+        for (int j = 0; j < BOARD_SIZE; j++) {
+            flips[Cell(i, j)] = std::vector<Cell>();
 
+            if (gameBoard[i][j] == 0)
+                calculateValidMovesForCell(i ,j);
+        }
+    }
 }
 
-//bool GameController::isValidMove(Cell move) {
-//    return std::find(validMoves.begin(), validMoves.end(), move) != validMoves.end();
-//}
+bool GameController::isValidMove(Cell move) {
+    return !flips[move].empty();
+}
+
+void printMap(std::map<Cell, std::vector<Cell>> map) {
+    for (auto c : map) {
+        qDebug() << "Cell: (" << c.first.first << ", " << c.first.second << ")" << endl;
+        qDebug() << c.second.size();
+        for (Cell flip : c.second) {
+            qDebug() << "(" << flip.first << ", " << flip.second << "), ";
+        }
+        qDebug() << endl << endl;
+    }
+}
 
 std::vector<Cell> GameController::act(Cell cell) {
-//    if (false) //(!isValidMove(cell))
-//        return std::vector<Cell>();
-
+//    calculateValidMoves();
+    printMap(flips);
 
     std::vector<Cell> result;
-    if(checkHasValidMoves(cell.first , cell.second)) {
-        qDebug() << "yeeesss";
+
+    if(isValidMove(cell)) {
         gameBoard[cell.first][cell.second] = currentTurn;
-        result = { Cell(cell.first, cell.second) };
+        result = {Cell(cell.first, cell.second)};
+        for(auto c : flips[cell]) {
+            result.push_back(c);
+            gameBoard[c.first][c.second] *= -1;
+        }
         currentTurn = (currentTurn == White ? Black : White);
-    }else {
-        qDebug() << "nooo";
     }
 
     return result;
@@ -55,55 +74,48 @@ int GameController::getCellData(Cell cell) {
     return gameBoard[cell.first][cell.second];
 }
 
-bool GameController::checkHasValidMoves(int x , int y) {
-    if(gameBoard[x][y] !=0)
-        return false;
-
+void GameController::calculateValidMovesForCell(int x, int y) {
     for(int stepX = -1 ; stepX < 2 ; stepX++){
         for(int stepY = -1 ; stepY < 2 ; stepY++){
             if(stepX == 0 && stepY == 0)
                 continue;
 
-            if(checkHasValidMovesInDirection(x , y , stepX , stepY))
-                return true;
+            calculateValidMovesForCellInDirection(x, y, stepX, stepY);
         }
     }
-    return false;
 }
 
-bool GameController::checkHasValidMovesInDirection(int x , int y , int stepX , int stepY) {
+void GameController::calculateValidMovesForCellInDirection(int x, int y, int stepX, int stepY) {
+
+    Cell c(x, y);
     if(checkValidNextMoveOncheck(x , y , stepX , stepY)){
         x += stepX; y += stepY;
     }else{
-        return false;
+        return;
     }
 
-
-    bool checkWhile = false;
+    std::vector<Cell> newlyFound;
     while(gameBoard[x][y] != 0) {
-        if (!checkWhile && gameBoard[x][y] == currentTurn)
-            return false;
-        if (!checkWhile && gameBoard[x][y] == -1*currentTurn)
-            checkWhile = true;
-        if (checkWhile && gameBoard[x][y] == currentTurn)
-            return true;
+        if (gameBoard[x][y] == -1 * currentTurn) {
+            newlyFound.emplace_back(x, y);
+        }
+        else {
+            for (Cell cell : newlyFound)
+                flips[c].push_back(cell);
+
+            return;
+        }
 
         if(checkValidNextMoveOncheck(x , y , stepX , stepY)){
             x += stepX; y +=stepY;
         }else{
-            return false;
+            return;
         }
     }
-
-    return false;
 }
 
 bool GameController::checkValidNextMoveOncheck(int x , int y, int stepX , int stepY) {
-    if ((x+stepX != -1) && (x+stepX != 8) )
-        if((y+stepY != -1) && (y+stepY != 8) )
-            return true;
-
-    return false;
+    return (x + stepX  >= 0 ) & (x + stepX <= 7) && (y + stepY >= 0) && (y + stepY <= 7);
 }
 
 

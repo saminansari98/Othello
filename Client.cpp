@@ -59,6 +59,7 @@ void Client::gameStarting() {
 
     widgetFirst->setLayout(layout);
 
+    drawValidMoves();
     for(int i = 0 ; i < BOARD_SIZE ; i++){
         for(int j = 0 ; j < BOARD_SIZE ; j++){
             connect(gameCell[i][j] , &QPushButton::pressed , this , [=]() { clicked(i, j); });
@@ -72,12 +73,29 @@ void Client::updateBoard(std::vector<std::pair<int, int>> updates) {
         if (gameController->getCellData(update) == Black)
             icon = QPixmap(BLACK_PIECE);
 
-        gameCell[update.first][update.second]->setIcon(icon);
-        gameCell[update.first][update.second]->setIconSize(QSize(75, 75));
+        gameCell[update.second][update.first]->setIcon(icon);
+        gameCell[update.second][update.first]->setIconSize(QSize(75, 75));
     }
 }
 
 void Client::clicked(int i, int j) {
-    std::vector<std::pair<int, int>> update = gameController->act(std::pair<int, int>(i, j));
+//    qDebug() << j << ", " << i;
+    std::vector<std::pair<int, int>> update = gameController->act(std::pair<int, int>(j, i));
     updateBoard(update);
+    drawValidMoves();
+}
+
+void Client::drawValidMoves() {
+    gameController->calculateValidMoves();
+
+    for(auto c : gameController->flips){
+        if(!c.second.empty()){
+            gameCell[c.first.second][c.first.first]->setStyleSheet("background-color:black;");
+            gameCell[c.first.second][c.first.first]->setEnabled(true);
+        }
+        else {
+            gameCell[c.first.second][c.first.first]->setStyleSheet("background-color:white;");
+            gameCell[c.first.second][c.first.first]->setEnabled(false);
+        }
+    }
 }

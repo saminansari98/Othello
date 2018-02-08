@@ -15,6 +15,7 @@
 #include "Constants.h"
 #include "GameController.h"
 #include <QDebug>
+#include <QPalette>
 //#include <sys/socket.h>
 
 
@@ -36,6 +37,8 @@ private:
     void gameStarting();
     void clicked(int, int);
     void updateBoard(std::vector<std::pair<int, int>>);
+
+    void drawValidMoves();
 
 };
 
