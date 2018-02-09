@@ -42,12 +42,12 @@ bool GameController::isValidMove(Cell move) {
 
 void printMap(std::map<Cell, std::vector<Cell>> map) {
     for (auto c : map) {
-        qDebug() << "Cell: (" << c.first.first << ", " << c.first.second << ")" << endl;
-        qDebug() << c.second.size();
+//        qDebug() << "Cell: (" << c.first.first << ", " << c.first.second << ")" << endl;
+//        qDebug() << c.second.size();
         for (Cell flip : c.second) {
-            qDebug() << "(" << flip.first << ", " << flip.second << "), ";
+//            qDebug() << "(" << flip.first << ", " << flip.second << "), ";
         }
-        qDebug() << endl << endl;
+//        qDebug() << endl << endl;
     }
 }
 

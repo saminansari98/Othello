@@ -6,7 +6,7 @@
 #define OTHELLO_CONSTANTS_H
 
 #define BOARD_SIZE 8
-#define BLACK_PIECE "/Users/samin/CLionProjects/Othello/black.jpg"
-#define WHITE_PIECE "/Users/samin/CLionProjects/Othello/white.jpg"
+#define BLACK_PIECE "/Users/samin/CLionProjects/Othello/black.png"
+#define WHITE_PIECE "/Users/samin/CLionProjects/Othello/white.png"
 
 #endif //OTHELLO_CONSTANTS_H
