@@ -26,12 +26,16 @@ GameController::GameController() {
 }
 
 void GameController::calculateValidMoves() {
+    areThereAnyValidMoves = false;
     for (int i = 0; i < BOARD_SIZE; i++) {
         for (int j = 0; j < BOARD_SIZE; j++) {
             flips[Cell(i, j)] = std::vector<Cell>();
 
-            if (gameBoard[i][j] == 0)
-                calculateValidMovesForCell(i ,j);
+            if (gameBoard[i][j] == 0) {
+                calculateValidMovesForCell(i, j);
+                if (!flips[Cell(i, j)].empty())
+                    areThereAnyValidMoves = true;
+            }
         }
     }
 }
@@ -52,19 +56,25 @@ void printMap(std::map<Cell, std::vector<Cell>> map) {
 }
 
 std::vector<Cell> GameController::act(Cell cell) {
-//    calculateValidMoves();
-    printMap(flips);
+//    printMap(flips);
 
     std::vector<Cell> result;
 
     if(isValidMove(cell)) {
         gameBoard[cell.first][cell.second] = currentTurn;
         result = {Cell(cell.first, cell.second)};
+
         for(auto c : flips[cell]) {
             result.push_back(c);
             gameBoard[c.first][c.second] *= -1;
         }
-        currentTurn = (currentTurn == White ? Black : White);
+        changeCurrentTurn();
+        if (!areThereAnyValidMoves) {
+            changeCurrentTurn();
+            if (!areThereAnyValidMoves) {
+                qDebug() << "Fuck you game is finished";
+            }
+        }
     }
 
     return result;
@@ -118,6 +128,10 @@ bool GameController::checkValidNextMoveOncheck(int x , int y, int stepX , int st
     return (x + stepX  >= 0 ) & (x + stepX <= 7) && (y + stepY >= 0) && (y + stepY <= 7);
 }
 
+void GameController::changeCurrentTurn() {
+    currentTurn = (currentTurn == White ? Black : White);
+    calculateValidMoves();
+}
 
 
 

@@ -7,31 +7,32 @@
 
 Client::Client() {
     widgetFirst = new QWidget();
-    layout = new QGridLayout();
+    layoutFirst = new QGridLayout();
     buttonPlay = new QPushButton();
     buttonPlay-> setText("Let's Play");
     buttonExite = new QPushButton();
-    buttonExite-> setText("Exite");
-    layout->addWidget(buttonPlay , 0 ,0);
-    layout->addWidget(buttonExite , 2 , 2);
-    widgetFirst ->setLayout(layout);
+    buttonExite-> setText("Exit");
+    layoutFirst->addWidget(buttonPlay , 0 ,0);
+    layoutFirst->addWidget(buttonExite , 2 , 2);
+    widgetFirst ->setLayout(layoutFirst);
 
 
 
     widgetFirst-> show();
 
     connect(buttonPlay , &QPushButton::pressed , this , &Client::gameStarting);
-
 }
 
 void Client::gameStarting() {
     widgetFirst->close();
-    widgetFirst = new QWidget();
+    widgetGame = new QDialog();
     layout = new QGridLayout();
     layout->setVerticalSpacing(0);
     layout->setHorizontalSpacing(0);
     layout->setMargin(-20);
-    widgetFirst->show();
+    widgetGame->show();
+
+    connect(widgetGame , &QDialog::finished , this , &Client::initialSetup);
 
     for(int i = 0; i < BOARD_SIZE; i++) {
         for (int j = 0; j < BOARD_SIZE; j++) {
@@ -64,8 +65,9 @@ void Client::gameStarting() {
     }
 
 
-    widgetFirst->setLayout(layout);
+    widgetGame->setLayout(layout);
 
+    gameController->calculateValidMoves();
     drawValidMoves();
     for(int i = 0 ; i < BOARD_SIZE ; i++){
         for(int j = 0 ; j < BOARD_SIZE ; j++){
@@ -86,17 +88,27 @@ void Client::updateBoard(std::vector<std::pair<int, int>> updates) {
 }
 
 void Client::clicked(int i, int j) {
-//    qDebug() << j << ", " << i;
+    // HumanPlayer
+    qDebug() << "Human ";
     std::vector<std::pair<int, int>> update = gameController->act(std::pair<int, int>(j, i));
     updateBoard(update);
+
+    // AIPlayer
+    while (gameController->currentTurn == Black) {
+        qDebug() << "AI";
+        update = gameController->act(randomCellSelect());
+        updateBoard(update);
+    }
+
     drawValidMoves();
 }
 
 void Client::drawValidMoves() {
-    gameController->calculateValidMoves();
+//    bool emptyOrNot = true;
 
     for(auto c : gameController->flips){
         if(!c.second.empty()){
+//            emptyOrNot = false;
             gameCell[c.first.second][c.first.first]->setStyleSheet("background-color:QColor(107 , 170 , 250) ; border: 0.5px solid black");
             gameCell[c.first.second][c.first.first]->setEnabled(true);
         }
@@ -105,4 +117,28 @@ void Client::drawValidMoves() {
             gameCell[c.first.second][c.first.first]->setEnabled(false);
         }
     }
+
+//    if(emptyOrNot){
+//        gameController->changeCurrentTurn();
+//        updateBoard(gameController->act(randomCellSelect()));
+//        drawValidMoves();
+//    }
+}
+
+
+Cell Client::randomCellSelect() {
+    std::vector<Cell> validCells;
+
+    for(auto c : gameController->flips)
+        if (!c.second.empty())
+            validCells.push_back(c.first);
+
+    long selectCell = rand() * validCells.size() / RAND_MAX;
+//    long selectCell = rand()%validCells.size();
+    return (validCells[selectCell]);
+}
+
+void Client::initialSetup() {
+    gameController = new GameController();
+    widgetFirst->show();
 }

@@ -16,6 +16,8 @@
 #include "GameController.h"
 #include <QDebug>
 #include <QPalette>
+#include <QGridLayout>
+#include <QDialog>
 //#include <sys/socket.h>
 
 
@@ -27,6 +29,8 @@ public:
 private:
     GameController *gameController = new GameController();
     QWidget *widgetFirst;
+    QDialog *widgetGame;
+    QGridLayout *layoutFirst;
     QGridLayout *layout;
     QPushButton *buttonPlay;
     QPushButton *buttonExite;
@@ -37,8 +41,9 @@ private:
     void gameStarting();
     void clicked(int, int);
     void updateBoard(std::vector<std::pair<int, int>>);
-
+    Cell randomCellSelect();
     void drawValidMoves();
+    void initialSetup();
 
 };
 

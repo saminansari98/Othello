@@ -24,16 +24,21 @@ public:
     void calculateValidMoves();
     std::map<Cell, std::vector<Cell>> flips;
     std::vector<Cell> act(Cell cell);
+    void changeCurrentTurn();
+
+    bool areThereAnyValidMoves;
     int getCellData(Cell cell);
+    Side currentTurn = White;
 
 private:
     void calculateValidMovesForCell(int, int);
     void calculateValidMovesForCellInDirection(int, int, int, int);
     bool checkValidNextMoveOncheck(int , int , int , int);
 
+
     int gameBoard [BOARD_SIZE][BOARD_SIZE];
-    std::vector<Cell> validMoves;
-    Side currentTurn = White;
+//    std::vector<Cell> validMoves;
+
 };
 
 
