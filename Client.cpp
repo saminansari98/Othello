@@ -21,6 +21,7 @@ Client::Client() {
     widgetFirst-> show();
 
     connect(buttonPlay , &QPushButton::pressed , this , &Client::gameStarting);
+    connect(buttonExite , &QPushButton::pressed , widgetFirst , &QWidget::close);
 }
 
 void Client::gameStarting() {
@@ -30,6 +31,7 @@ void Client::gameStarting() {
     layout->setVerticalSpacing(0);
     layout->setHorizontalSpacing(0);
     layout->setMargin(-20);
+    widgetGame->setFixedSize(600, 600);
     widgetGame->show();
 
     connect(widgetGame , &QDialog::finished , this , &Client::initialSetup);
@@ -37,30 +39,17 @@ void Client::gameStarting() {
     for(int i = 0; i < BOARD_SIZE; i++) {
         for (int j = 0; j < BOARD_SIZE; j++) {
             gameCell[i][j] = new QPushButton();
+            gameCell[i][j]->setMinimumSize(60, 60);
             gameCell[i][j]->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-            gameCell[i][j]->setMinimumWidth(60);
-            gameCell[i][j]->setMinimumHeight(60);
+            gameCell[i][j]->setStyleSheet("border: 1px solid black");
+            gameCell[i][j]->setIconSize(QSize(60, 60));
 
             layout->addWidget(gameCell[i][j], i, j);
-            gameCell[i][j]->setStyleSheet("border: 1px solid black");
 
-            if(i == 3 && j == 3) {
+            if((i == 3 && j == 3) || (i == 4 && j== 4))
                 gameCell[i][j]->setIcon(QPixmap(BLACK_PIECE));
-                gameCell[3][3]->setIconSize(QSize(60, 60));
-            }
-            if(i == 4 && j== 3) {
+            else if((i == 4 && j== 3) || (i == 3 && j == 4))
                 gameCell[i][j]->setIcon(QPixmap(WHITE_PIECE));
-                gameCell[4][3]->setIconSize(QSize(60, 60));
-            }
-            if(i == 3 && j == 4){
-                gameCell[i][j]->setIcon(QPixmap(WHITE_PIECE));
-                gameCell[3][4]->setIconSize(QSize(60, 60));
-            }
-            if(i == 4 && j== 4) {
-                gameCell[i][j]->setIcon(QPixmap(BLACK_PIECE));
-                gameCell[4][4]->setIconSize(QSize(60, 60));
-            }
-
         }
     }
 
@@ -85,7 +74,7 @@ void Client::updateBoard(std::vector<std::pair<int, int>> updates) {
             icon = QPixmap(BLACK_PIECE);
 
         gameCell[update.second][update.first]->setIcon(icon);
-        gameCell[update.second][update.first]->setIconSize(QSize(75, 75));
+        gameCell[update.second][update.first]->setIconSize(QSize(60, 60));
     }
 }
 
@@ -107,11 +96,9 @@ void Client::clicked(int i, int j) {
 }
 
 void Client::drawValidMoves() {
-//    bool emptyOrNot = true;
 
     for(auto c : gameController->flips){
         if(!c.second.empty()){
-//            emptyOrNot = false;
             gameCell[c.first.second][c.first.first]->setStyleSheet("background-color:QColor(107 , 170 , 250) ; border: 0.5px solid black");
             gameCell[c.first.second][c.first.first]->setEnabled(true);
         }
@@ -120,12 +107,6 @@ void Client::drawValidMoves() {
             gameCell[c.first.second][c.first.first]->setEnabled(false);
         }
     }
-
-//    if(emptyOrNot){
-//        gameController->changeCurrentTurn();
-//        updateBoard(gameController->act(randomCellSelect()));
-//        drawValidMoves();
-//    }
 }
 
 void Client::initialSetup() {
