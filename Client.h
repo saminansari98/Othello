@@ -14,6 +14,7 @@
 #include <QHeaderView>
 #include "Constants.h"
 #include "GameController.h"
+#include "AI.h"
 #include <QDebug>
 #include <QPalette>
 #include <QGridLayout>
@@ -38,6 +39,9 @@ private:
     QTableWidget *tableWidget;
 
     QPushButton *gameCell[BOARD_SIZE][BOARD_SIZE];
+
+    AI *ai;
+
     void gameStarting();
     void clicked(int, int);
     void updateBoard(std::vector<std::pair<int, int>>);

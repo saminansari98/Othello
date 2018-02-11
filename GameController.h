@@ -9,9 +9,12 @@
 #include <vector>
 #include <map>
 #include <QDebug>
+#include <QGridLayout>
+#include <QLabel>
 
 enum Side {
     Black = -1,
+    Finished = 0,
     White = 1
 };
 
@@ -25,6 +28,7 @@ public:
     std::map<Cell, std::vector<Cell>> flips;
     std::vector<Cell> act(Cell cell);
     void changeCurrentTurn();
+    std::vector<Cell> getValidCells();
 
     bool areThereAnyValidMoves;
     int getCellData(Cell cell);
@@ -34,7 +38,7 @@ private:
     void calculateValidMovesForCell(int, int);
     void calculateValidMovesForCellInDirection(int, int, int, int);
     bool checkValidNextMoveOncheck(int , int , int , int);
-
+    void calculateWinner();
 
     int gameBoard [BOARD_SIZE][BOARD_SIZE];
 //    std::vector<Cell> validMoves;

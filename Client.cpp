@@ -74,6 +74,8 @@ void Client::gameStarting() {
             connect(gameCell[i][j] , &QPushButton::pressed , this , [=]() { clicked(i, j); });
         }
     }
+
+    ai = new AI(gameController);
 }
 
 void Client::updateBoard(std::vector<std::pair<int, int>> updates) {
@@ -92,11 +94,12 @@ void Client::clicked(int i, int j) {
     qDebug() << "Human ";
     std::vector<std::pair<int, int>> update = gameController->act(std::pair<int, int>(j, i));
     updateBoard(update);
+    drawValidMoves();
 
     // AIPlayer
     while (gameController->currentTurn == Black) {
         qDebug() << "AI";
-        update = gameController->act(randomCellSelect());
+        update = gameController->act(ai->getMove());
         updateBoard(update);
     }
 
@@ -125,20 +128,8 @@ void Client::drawValidMoves() {
 //    }
 }
 
-
-Cell Client::randomCellSelect() {
-    std::vector<Cell> validCells;
-
-    for(auto c : gameController->flips)
-        if (!c.second.empty())
-            validCells.push_back(c.first);
-
-    long selectCell = rand() * validCells.size() / RAND_MAX;
-//    long selectCell = rand()%validCells.size();
-    return (validCells[selectCell]);
-}
-
 void Client::initialSetup() {
     gameController = new GameController();
+    ai = new AI(gameController);
     widgetFirst->show();
 }

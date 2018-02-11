@@ -2,6 +2,7 @@
 // Created by Samin on 2/6/18.
 //
 
+#include <QDialog>
 #include "GameController.h"
 
 GameController::GameController() {
@@ -63,16 +64,18 @@ std::vector<Cell> GameController::act(Cell cell) {
     if(isValidMove(cell)) {
         gameBoard[cell.first][cell.second] = currentTurn;
         result = {Cell(cell.first, cell.second)};
-
         for(auto c : flips[cell]) {
             result.push_back(c);
             gameBoard[c.first][c.second] *= -1;
         }
+
+
         changeCurrentTurn();
         if (!areThereAnyValidMoves) {
             changeCurrentTurn();
             if (!areThereAnyValidMoves) {
-                qDebug() << "Fuck you game is finished";
+                currentTurn = Finished;
+                calculateWinner();
             }
         }
     }
@@ -125,12 +128,50 @@ void GameController::calculateValidMovesForCellInDirection(int x, int y, int ste
 }
 
 bool GameController::checkValidNextMoveOncheck(int x , int y, int stepX , int stepY) {
-    return (x + stepX  >= 0 ) & (x + stepX <= 7) && (y + stepY >= 0) && (y + stepY <= 7);
+    return (x + stepX  >= 0 ) && (x + stepX <= 7) && (y + stepY >= 0) && (y + stepY <= 7);
 }
 
 void GameController::changeCurrentTurn() {
     currentTurn = (currentTurn == White ? Black : White);
     calculateValidMoves();
+}
+
+std::vector<Cell> GameController::getValidCells() {
+    std::vector<Cell> validCells;
+
+    for(auto c : flips)
+        if (!c.second.empty())
+            validCells.push_back(c.first);
+
+    return validCells;
+}
+
+void GameController::calculateWinner() {
+    QDialog *winner = new QDialog();
+    QGridLayout *layoutWinner = new QGridLayout();
+    QLabel *lableWinner = new QLabel();
+
+    int white = 0 ; int black = 0;
+    for(int i = 0 ; i < BOARD_SIZE ; i++){
+        for(int j = 0 ; j < BOARD_SIZE ; j++){
+            if(gameBoard[i][j] == Black)
+                black++;
+            else if(gameBoard[i][j] == White)
+                white++;
+        }
+    }
+
+
+    if(black > white)
+        lableWinner->setText(QString("BLACK IS WINNER"));
+    else if(white > black)
+        lableWinner->setText(QString("WHITE IS WINNER"));
+    else
+        lableWinner->setText(QString("NO ONE"));
+
+    layoutWinner->addWidget(lableWinner);
+    winner->setLayout(layoutWinner);
+    winner->exec();
 }
 
 
