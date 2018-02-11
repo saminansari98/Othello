@@ -12,11 +12,14 @@
 class AI {
 public:
     AI(GameController *controller);
+
     std::pair<int, int> getMove();
 
 private:
     std::pair<int, int> getBestCell();
+
     std::pair<int, int> getRandomCell();
+
     GameController *gc;
 };
 

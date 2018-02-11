@@ -23,7 +23,7 @@
 
 
 
-class Client : public QObject{
+class Client : public QObject {
 public:
     Client();
 
@@ -43,10 +43,15 @@ private:
     AI *ai;
 
     void gameStarting();
+
     void clicked(int, int);
+
     void updateBoard(std::vector<std::pair<int, int>>);
+
     Cell randomCellSelect();
+
     void drawValidMoves();
+
     void initialSetup();
 
 };

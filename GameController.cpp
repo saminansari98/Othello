@@ -6,21 +6,21 @@
 #include "GameController.h"
 
 GameController::GameController() {
-    for(int i = 0 ; i < 7 ; i++){
-        for(int j = 0 ; j < 7 ; j++){
+    for (int i = 0; i < 7; i++) {
+        for (int j = 0; j < 7; j++) {
             gameBoard[i][j] = 0;
 
-            if(i == 3 && j == 3) {
-                gameBoard[i][j]=Black;
+            if (i == 3 && j == 3) {
+                gameBoard[i][j] = Black;
             }
-            if(i == 4 && j== 3) {
-                gameBoard[i][j]=White;
+            if (i == 4 && j == 3) {
+                gameBoard[i][j] = White;
             }
-            if(i == 3 && j == 4){
-                gameBoard[i][j]=White;
+            if (i == 3 && j == 4) {
+                gameBoard[i][j] = White;
             }
-            if(i == 4 && j== 4) {
-                gameBoard[i][j]=Black;
+            if (i == 4 && j == 4) {
+                gameBoard[i][j] = Black;
             }
         }
     }
@@ -61,10 +61,10 @@ std::vector<Cell> GameController::act(Cell cell) {
 
     std::vector<Cell> result;
 
-    if(isValidMove(cell)) {
+    if (isValidMove(cell)) {
         gameBoard[cell.first][cell.second] = currentTurn;
         result = {Cell(cell.first, cell.second)};
-        for(auto c : flips[cell]) {
+        for (auto c : flips[cell]) {
             result.push_back(c);
             gameBoard[c.first][c.second] *= -1;
         }
@@ -88,9 +88,9 @@ int GameController::getCellData(Cell cell) {
 }
 
 void GameController::calculateValidMovesForCell(int x, int y) {
-    for(int stepX = -1 ; stepX < 2 ; stepX++){
-        for(int stepY = -1 ; stepY < 2 ; stepY++){
-            if(stepX == 0 && stepY == 0)
+    for (int stepX = -1; stepX < 2; stepX++) {
+        for (int stepY = -1; stepY < 2; stepY++) {
+            if (stepX == 0 && stepY == 0)
                 continue;
 
             calculateValidMovesForCellInDirection(x, y, stepX, stepY);
@@ -101,34 +101,35 @@ void GameController::calculateValidMovesForCell(int x, int y) {
 void GameController::calculateValidMovesForCellInDirection(int x, int y, int stepX, int stepY) {
 
     Cell c(x, y);
-    if(checkValidNextMoveOncheck(x , y , stepX , stepY)){
-        x += stepX; y += stepY;
-    }else{
+    if (checkValidNextMoveOncheck(x, y, stepX, stepY)) {
+        x += stepX;
+        y += stepY;
+    } else {
         return;
     }
 
     std::vector<Cell> newlyFound;
-    while(gameBoard[x][y] != 0) {
+    while (gameBoard[x][y] != 0) {
         if (gameBoard[x][y] == -1 * currentTurn) {
             newlyFound.emplace_back(x, y);
-        }
-        else {
+        } else {
             for (Cell cell : newlyFound)
                 flips[c].push_back(cell);
 
             return;
         }
 
-        if(checkValidNextMoveOncheck(x , y , stepX , stepY)){
-            x += stepX; y +=stepY;
-        }else{
+        if (checkValidNextMoveOncheck(x, y, stepX, stepY)) {
+            x += stepX;
+            y += stepY;
+        } else {
             return;
         }
     }
 }
 
-bool GameController::checkValidNextMoveOncheck(int x , int y, int stepX , int stepY) {
-    return (x + stepX  >= 0 ) && (x + stepX <= 7) && (y + stepY >= 0) && (y + stepY <= 7);
+bool GameController::checkValidNextMoveOncheck(int x, int y, int stepX, int stepY) {
+    return (x + stepX >= 0) && (x + stepX <= 7) && (y + stepY >= 0) && (y + stepY <= 7);
 }
 
 void GameController::changeCurrentTurn() {
@@ -139,7 +140,7 @@ void GameController::changeCurrentTurn() {
 std::vector<Cell> GameController::getValidCells() {
     std::vector<Cell> validCells;
 
-    for(auto c : flips)
+    for (auto c : flips)
         if (!c.second.empty())
             validCells.push_back(c.first);
 
@@ -151,20 +152,21 @@ void GameController::calculateWinner() {
     QGridLayout *layoutWinner = new QGridLayout();
     QLabel *lableWinner = new QLabel();
 
-    int white = 0 ; int black = 0;
-    for(int i = 0 ; i < BOARD_SIZE ; i++){
-        for(int j = 0 ; j < BOARD_SIZE ; j++){
-            if(gameBoard[i][j] == Black)
+    int white = 0;
+    int black = 0;
+    for (int i = 0; i < BOARD_SIZE; i++) {
+        for (int j = 0; j < BOARD_SIZE; j++) {
+            if (gameBoard[i][j] == Black)
                 black++;
-            else if(gameBoard[i][j] == White)
+            else if (gameBoard[i][j] == White)
                 white++;
         }
     }
 
 
-    if(black > white)
+    if (black > white)
         lableWinner->setText(QString("BLACK IS WINNER"));
-    else if(white > black)
+    else if (white > black)
         lableWinner->setText(QString("WHITE IS WINNER"));
     else
         lableWinner->setText(QString("NO ONE"));

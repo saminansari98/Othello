@@ -4,7 +4,7 @@
 
 #include "AI.h"
 
-AI::AI(GameController *controller) : gc(controller){
+AI::AI(GameController *controller) : gc(controller) {
 
 }
 
@@ -24,8 +24,8 @@ std::pair<int, int> AI::getRandomCell() {
 std::pair<int, int> AI::getBestCell() {
     auto validCells = gc->getValidCells();
     Cell maxCell = validCells[0];
-    for (auto c : validCells){
-        if(gc->flips[c].size() > gc->flips[maxCell].size() )
+    for (auto c : validCells) {
+        if (gc->flips[c].size() > gc->flips[maxCell].size())
             maxCell = c;
     }
 

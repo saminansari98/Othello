@@ -9,19 +9,18 @@ Client::Client() {
     widgetFirst = new QWidget();
     layoutFirst = new QGridLayout();
     buttonPlay = new QPushButton();
-    buttonPlay-> setText("Let's Play");
+    buttonPlay->setText("Let's Play");
     buttonExite = new QPushButton();
-    buttonExite-> setText("Exit");
-    layoutFirst->addWidget(buttonPlay , 0 ,0);
-    layoutFirst->addWidget(buttonExite , 2 , 2);
-    widgetFirst ->setLayout(layoutFirst);
+    buttonExite->setText("Exit");
+    layoutFirst->addWidget(buttonPlay, 0, 0);
+    layoutFirst->addWidget(buttonExite, 2, 2);
+    widgetFirst->setLayout(layoutFirst);
 
 
+    widgetFirst->show();
 
-    widgetFirst-> show();
-
-    connect(buttonPlay , &QPushButton::pressed , this , &Client::gameStarting);
-    connect(buttonExite , &QPushButton::pressed , widgetFirst , &QWidget::close);
+    connect(buttonPlay, &QPushButton::pressed, this, &Client::gameStarting);
+    connect(buttonExite, &QPushButton::pressed, widgetFirst, &QWidget::close);
 }
 
 void Client::gameStarting() {
@@ -34,9 +33,9 @@ void Client::gameStarting() {
     widgetGame->setFixedSize(600, 600);
     widgetGame->show();
 
-    connect(widgetGame , &QDialog::finished , this , &Client::initialSetup);
+    connect(widgetGame, &QDialog::finished, this, &Client::initialSetup);
 
-    for(int i = 0; i < BOARD_SIZE; i++) {
+    for (int i = 0; i < BOARD_SIZE; i++) {
         for (int j = 0; j < BOARD_SIZE; j++) {
             gameCell[i][j] = new QPushButton();
             gameCell[i][j]->setMinimumSize(60, 60);
@@ -46,9 +45,9 @@ void Client::gameStarting() {
 
             layout->addWidget(gameCell[i][j], i, j);
 
-            if((i == 3 && j == 3) || (i == 4 && j== 4))
+            if ((i == 3 && j == 3) || (i == 4 && j == 4))
                 gameCell[i][j]->setIcon(QPixmap(BLACK_PIECE));
-            else if((i == 4 && j== 3) || (i == 3 && j == 4))
+            else if ((i == 4 && j == 3) || (i == 3 && j == 4))
                 gameCell[i][j]->setIcon(QPixmap(WHITE_PIECE));
         }
     }
@@ -58,9 +57,9 @@ void Client::gameStarting() {
 
     gameController->calculateValidMoves();
     drawValidMoves();
-    for(int i = 0 ; i < BOARD_SIZE ; i++){
-        for(int j = 0 ; j < BOARD_SIZE ; j++){
-            connect(gameCell[i][j] , &QPushButton::pressed , this , [=]() { clicked(i, j); });
+    for (int i = 0; i < BOARD_SIZE; i++) {
+        for (int j = 0; j < BOARD_SIZE; j++) {
+            connect(gameCell[i][j], &QPushButton::pressed, this, [=]() { clicked(i, j); });
         }
     }
 
@@ -97,13 +96,14 @@ void Client::clicked(int i, int j) {
 
 void Client::drawValidMoves() {
 
-    for(auto c : gameController->flips){
-        if(!c.second.empty()){
-            gameCell[c.first.second][c.first.first]->setStyleSheet("background-color:QColor(107 , 170 , 250) ; border: 0.5px solid black");
+    for (auto c : gameController->flips) {
+        if (!c.second.empty()) {
+            gameCell[c.first.second][c.first.first]->setStyleSheet(
+                    "background-color:QColor(107 , 170 , 250) ; border: 0.5px solid black");
             gameCell[c.first.second][c.first.first]->setEnabled(true);
-        }
-        else {
-            gameCell[c.first.second][c.first.first]->setStyleSheet("background-color:QColor(107 , 170 , 150) ; border: 0.5px solid black ");
+        } else {
+            gameCell[c.first.second][c.first.first]->setStyleSheet(
+                    "background-color:QColor(107 , 170 , 150) ; border: 0.5px solid black ");
             gameCell[c.first.second][c.first.first]->setEnabled(false);
         }
     }
