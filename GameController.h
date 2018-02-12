@@ -40,7 +40,9 @@ public:
 
     int getCellData(Cell cell);
 
-    Side currentTurn = White;
+    Side currentTurn;
+
+    void printMap();
 
 private:
     void calculateValidMovesForCell(int, int);

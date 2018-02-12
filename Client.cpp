@@ -82,7 +82,6 @@ void Client::clicked(int i, int j) {
     qDebug() << "Human ";
     std::vector<std::pair<int, int>> update = gameController->act(std::pair<int, int>(j, i));
     updateBoard(update);
-    drawValidMoves();
 
     // AIPlayer
     while (gameController->currentTurn == Black) {
@@ -95,7 +94,6 @@ void Client::clicked(int i, int j) {
 }
 
 void Client::drawValidMoves() {
-
     for (auto c : gameController->flips) {
         if (!c.second.empty()) {
             gameCell[c.first.second][c.first.first]->setStyleSheet(

@@ -6,8 +6,9 @@
 #include "GameController.h"
 
 GameController::GameController() {
-    for (int i = 0; i < 7; i++) {
-        for (int j = 0; j < 7; j++) {
+    currentTurn = White;
+    for (int i = 0; i < BOARD_SIZE; i++) {
+        for (int j = 0; j < BOARD_SIZE; j++) {
             gameBoard[i][j] = 0;
 
             if (i == 3 && j == 3) {
@@ -42,13 +43,13 @@ void GameController::calculateValidMoves() {
 }
 
 bool GameController::isValidMove(Cell move) {
-    return !flips[move].empty();
+    return !(flips[move].empty());
 }
 
-void printMap(std::map<Cell, std::vector<Cell>> map) {
-    for (auto c : map) {
-//        qDebug() << "Cell: (" << c.first.first << ", " << c.first.second << ")" << endl;
-//        qDebug() << c.second.size();
+void GameController::printMap() {
+    for (auto c : flips) {
+        qDebug() << "Cell: (" << c.first.first << ", " << c.first.second << ")   :" ;
+        qDebug() << c.second.size() << endl;
         for (Cell flip : c.second) {
 //            qDebug() << "(" << flip.first << ", " << flip.second << "), ";
         }
@@ -66,7 +67,7 @@ std::vector<Cell> GameController::act(Cell cell) {
         result = {Cell(cell.first, cell.second)};
         for (auto c : flips[cell]) {
             result.push_back(c);
-            gameBoard[c.first][c.second] *= -1;
+            gameBoard[c.first][c.second] = ((currentTurn == White) ? White : Black);
         }
 
 
@@ -110,7 +111,7 @@ void GameController::calculateValidMovesForCellInDirection(int x, int y, int ste
 
     std::vector<Cell> newlyFound;
     while (gameBoard[x][y] != 0) {
-        if (gameBoard[x][y] == -1 * currentTurn) {
+        if (gameBoard[x][y] != currentTurn) {
             newlyFound.emplace_back(x, y);
         } else {
             for (Cell cell : newlyFound)
@@ -129,7 +130,12 @@ void GameController::calculateValidMovesForCellInDirection(int x, int y, int ste
 }
 
 bool GameController::checkValidNextMoveOncheck(int x, int y, int stepX, int stepY) {
-    return (x + stepX >= 0) && (x + stepX <= 7) && (y + stepY >= 0) && (y + stepY <= 7);
+    if((x + stepX >= 0) && (x + stepX < BOARD_SIZE)){
+        if((y + stepY >= 0) && (y + stepY < BOARD_SIZE)){
+            return true;
+        }
+    }
+    return false;
 }
 
 void GameController::changeCurrentTurn() {

@@ -36,8 +36,6 @@ private:
     QPushButton *buttonPlay;
     QPushButton *buttonExite;
 
-    QTableWidget *tableWidget;
-
     QPushButton *gameCell[BOARD_SIZE][BOARD_SIZE];
 
     AI *ai;
@@ -47,8 +45,6 @@ private:
     void clicked(int, int);
 
     void updateBoard(std::vector<std::pair<int, int>>);
-
-    Cell randomCellSelect();
 
     void drawValidMoves();
 

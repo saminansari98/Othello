@@ -7,6 +7,5 @@ int main(int argc, char *argv[]) {
 
     Client *client = new Client();
 
-
     return app.exec();
 }
