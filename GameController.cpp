@@ -11,18 +11,13 @@ GameController::GameController() {
         for (int j = 0; j < BOARD_SIZE; j++) {
             gameBoard[i][j] = 0;
 
-            if (i == 3 && j == 3) {
+            int a = BOARD_SIZE / 2;
+            int b = a - 1;
+
+            if ((i == b && j == b) || (i == a && j == a))
                 gameBoard[i][j] = Black;
-            }
-            if (i == 4 && j == 3) {
+            if ((i == a && j == b) || (i == b && j == a))
                 gameBoard[i][j] = White;
-            }
-            if (i == 3 && j == 4) {
-                gameBoard[i][j] = White;
-            }
-            if (i == 4 && j == 4) {
-                gameBoard[i][j] = Black;
-            }
         }
     }
 }
@@ -48,7 +43,7 @@ bool GameController::isValidMove(Cell move) {
 
 void GameController::printMap() {
     for (auto c : flips) {
-        qDebug() << "Cell: (" << c.first.first << ", " << c.first.second << ")   :" ;
+        qDebug() << "Cell: (" << c.first.first << ", " << c.first.second << ")   :";
         qDebug() << c.second.size() << endl;
         for (Cell flip : c.second) {
 //            qDebug() << "(" << flip.first << ", " << flip.second << "), ";
@@ -130,8 +125,8 @@ void GameController::calculateValidMovesForCellInDirection(int x, int y, int ste
 }
 
 bool GameController::checkValidNextMoveOncheck(int x, int y, int stepX, int stepY) {
-    if((x + stepX >= 0) && (x + stepX < BOARD_SIZE)){
-        if((y + stepY >= 0) && (y + stepY < BOARD_SIZE)){
+    if ((x + stepX >= 0) && (x + stepX < BOARD_SIZE)) {
+        if ((y + stepY >= 0) && (y + stepY < BOARD_SIZE)) {
             return true;
         }
     }

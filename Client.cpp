@@ -45,9 +45,11 @@ void Client::gameStarting() {
 
             layout->addWidget(gameCell[i][j], i, j);
 
-            if ((i == 3 && j == 3) || (i == 4 && j == 4))
+            int a = BOARD_SIZE / 2;
+            int b = a - 1;
+            if ((i == b && j == b) || (i == a && j == a))
                 gameCell[i][j]->setIcon(QPixmap(BLACK_PIECE));
-            else if ((i == 4 && j == 3) || (i == 3 && j == 4))
+            else if ((i == a && j == b) || (i == b && j == a))
                 gameCell[i][j]->setIcon(QPixmap(WHITE_PIECE));
         }
     }
