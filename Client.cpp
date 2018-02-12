@@ -29,9 +29,16 @@ void Client::gameStarting() {
     layout = new QGridLayout();
     layout->setVerticalSpacing(0);
     layout->setHorizontalSpacing(0);
-    layout->setMargin(-20);
+    layout->setMargin(20);
     widgetGame->setFixedSize(600, 600);
-    widgetGame->show();
+
+    blackScoreLabel = new QLabel();
+    auto textScore = "Black : " + QString(std::to_string(gameController->getScore(Black)).c_str());
+    blackScoreLabel->setText(QString(textScore));
+    whiteScoreLabel = new QLabel();
+    textScore = "White : " + QString(std::to_string(gameController->getScore(White)).c_str());
+    whiteScoreLabel->setText(QString(textScore));
+
 
     connect(widgetGame, &QDialog::finished, this, &Client::initialSetup);
 
@@ -54,8 +61,10 @@ void Client::gameStarting() {
         }
     }
 
-
     widgetGame->setLayout(layout);
+    widgetGame->show();
+    layout->addWidget(blackScoreLabel);
+    layout->addWidget(whiteScoreLabel);
 
     gameController->calculateValidMoves();
     drawValidMoves();
@@ -77,17 +86,24 @@ void Client::updateBoard(std::vector<std::pair<int, int>> updates) {
         gameCell[update.second][update.first]->setIcon(icon);
         gameCell[update.second][update.first]->setIconSize(QSize(60, 60));
     }
+
+
+    auto textScore = "Black : " + QString(std::to_string(gameController->getScore(Black)).c_str());
+    blackScoreLabel->setText(QString(textScore));
+    textScore = "White : " + QString(std::to_string(gameController->getScore(White)).c_str());
+    whiteScoreLabel->setText(QString(textScore));
+
 }
 
 void Client::clicked(int i, int j) {
     // HumanPlayer
-    qDebug() << "Human ";
+//    qDebug() << "Human ";
     std::vector<std::pair<int, int>> update = gameController->act(std::pair<int, int>(j, i));
     updateBoard(update);
 
     // AIPlayer
     while (gameController->currentTurn == Black) {
-        qDebug() << "AI";
+//        qDebug() << "AI";
         update = gameController->act(ai->getMove());
         updateBoard(update);
     }

@@ -153,17 +153,8 @@ void GameController::calculateWinner() {
     QGridLayout *layoutWinner = new QGridLayout();
     QLabel *lableWinner = new QLabel();
 
-    int white = 0;
-    int black = 0;
-    for (int i = 0; i < BOARD_SIZE; i++) {
-        for (int j = 0; j < BOARD_SIZE; j++) {
-            if (gameBoard[i][j] == Black)
-                black++;
-            else if (gameBoard[i][j] == White)
-                white++;
-        }
-    }
-
+    int white = getScore(White);
+    int black = getScore(Black);
 
     if (black > white)
         lableWinner->setText(QString("BLACK IS WINNER"));
@@ -176,6 +167,17 @@ void GameController::calculateWinner() {
     winner->setLayout(layoutWinner);
     winner->exec();
 }
+
+int GameController::getScore(Side side) {
+    int count = 0;
+    for (int i = 0; i < BOARD_SIZE; i++)
+        for (int j = 0; j < BOARD_SIZE; j++)
+            if (gameBoard[i][j] == side)
+                count++;
+
+    return count;
+}
+
 
 
 

@@ -44,6 +44,8 @@ public:
 
     void printMap();
 
+    int getScore(Side side);
+
 private:
     void calculateValidMovesForCell(int, int);
 
@@ -52,6 +54,8 @@ private:
     bool checkValidNextMoveOncheck(int, int, int, int);
 
     void calculateWinner();
+
+
 
     int gameBoard[BOARD_SIZE][BOARD_SIZE];
 //    std::vector<Cell> validMoves;

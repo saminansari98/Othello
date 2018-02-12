@@ -18,7 +18,9 @@
 #include <QDebug>
 #include <QPalette>
 #include <QGridLayout>
+#include <QLabel>
 #include <QDialog>
+#include <QStatusBar>
 //#include <sys/socket.h>
 
 
@@ -35,7 +37,8 @@ private:
     QGridLayout *layout;
     QPushButton *buttonPlay;
     QPushButton *buttonExite;
-
+    QLabel *blackScoreLabel;
+    QLabel *whiteScoreLabel;
     QPushButton *gameCell[BOARD_SIZE][BOARD_SIZE];
 
     AI *ai;
